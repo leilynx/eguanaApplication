@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+   <meta charset = "UTF-8" />
+   <title> Maria's Application </title>
+  </head>
+  <body>
+    <p>Build Subject and send Mail</p>
+    <input type="text" id="token" />
+    <button onclick="buildEmail()">Send Mail</button>
+    <iframe src = "CV.pdf" width="100%" height="900px"></iframe> 
+    <script>
+      function calculateSubject(code) {
+        // convert each array element into ASCII character
+        const subjectArray = code.map((element) => {
+          return element.toString().charCodeAt();
+        });
+        // create string from array
+        return `Zu handen Julia, ${subjectArray.join(' ')}`;
+      }
+
+      function calculateCode(token) {
+        // use characters ASCII decimal value
+        const codeArray = Array.from(token).map((char) => {
+          return char.charCodeAt() === 32 ? 32 : (char.charCodeAt() % 65) + 63;
+        });
+        return codeArray;
+      }
+
+      function calculateReceiver(token) {
+        let sum = 0;
+        const receiver = calculateCode(token);
+        for (let i = 0; i < receiver.length; i++) {
+          const element = t[i];
+          sum += element;
+        }
+    
+        /* alternative for function calculateReceiver() 
+          const s = t.reduce((agg, curr) => {
+          return agg += curr;
+        });*/
+  
+        return `jobs${sum % 600}@eguana.at`;
+      }
+
+      writeYourOwnLetterOfApplication() {
+        
+        `Liebes Eguana-Team,
+
+        An dieser Stelle bewerbe mich bei euch als Junior Testerin.
+
+        Im Rahmen meines neben der Arbeit laufenden Studiums habe ich einen sehr theoretischen Überblick erworben, 
+        vorallem aber zuhause im Selbststudium einen praktischen Zugang zum Programmieren entwickelt. 
+        Nun habe ich für mich erkannt, dass ich vorzugsweise und besser im aktiven Tun und Debuggen lerne.
+
+        Nachdem ich das Programmieren mit C++ gelernt habe und diese Sprache auch am meisten verwendet habe, sind meine
+        Javascript-Kenntnisse definitv noch ausbaufähig; 
+        ich bin jedoch hochmotiviert, neugierig, hartnäckig, lerne gerne kontinuierlich 
+        und verstehe Konzepte und Zusammenhänge recht schnell 
+        (sollte dies einmal nicht der Fall sein, schreibe ich einfach genau mit).
+
+        Ich finde eure aktuellen Projekte - eure technischen Leistungen beim Ausbau der U-Bahn und die Plattform SCALES - äußerst spannend und bedeutsam.
+        Daher würde ich mich sehr freuen, euch schon bald tatkräftig als Testerin unterstützen zu dürfen.
+
+        Liebe Grüße,
+        Maria`
+}
+
+      function buildEmail();
+        // use this token: fgt Dguvgp
+        const token = document.querySelector("#token").value;
+        const letterOfApplication = writeYourOwnLetterOfApplication();
+        const subject = calculateSubject(calculateCode(token));
+        console.log(subject);
+        const receiver = calculateReceiver(token);
+        sendEmail({
+          receiver,
+          subject,
+          attachment: 'cv.pdf',
+          text: letterOfApplication,
+        });
+
+      // I'm very grateful for any feedback and amendments
+    </script>
+  </body>
+</html>
